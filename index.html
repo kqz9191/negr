@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>мы️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        /* --- Сброс стилей --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* Чтобы текст не выделялся при кликах */
+        }
+
+        /* --- Основной фон --- */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0518, #360920, #0f0518);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Живой градиент */
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+            perspective: 1000px; /* Для 3D эффекта */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Анимированные сердца (Фон) --- */
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart-bg {
+            position: absolute;
+            bottom: -100px;
+            background-color: rgba(255, 107, 129, 0.6);
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+            margin: 0 10px;
+            transform: rotate(-45deg);
+            animation: float 6s linear infinite;
+        }
+
+        .heart-bg:before, .heart-bg:after {
+            content: "";
+            position: absolute;
+            background-color: inherit;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        }
+
+        .heart-bg:before { top: -15px; left: 0; }
+        .heart-bg:after { left: 15px; top: 0; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(-45deg) scale(0.8); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-120vh) rotate(-45deg) scale(1.2); opacity: 0; }
+        }
+
+        /* --- Основная карточка (Glassmorphism + 3D) --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3.5rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            text-align: center;
+            max-width: 90%;
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.1s;
+        }
+
+        /* Элементы внутри карточки "всплывают" в 3D */
+        .container > * {
+            transform: translateZ(20px);
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff8fa3, #fff, #ff8fa3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 143, 163, 0.4);
+            animation: pulseText 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { text-shadow: 0 0 30px rgba(255, 143, 163, 0.4); }
+            50% { text-shadow: 0 0 50px rgba(255, 143, 163, 0.8); }
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- Таймер --- */
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .time-box {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 20px 25px;
+            border-radius: 15px;
+            min-width: 110px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .time-box:after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(255, 143, 163, 0.3);
+        }
+
+        .number {
+            display: block;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to bottom, #ffffff, #ffcbd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(255, 193, 204, 0.5));
+        }
+
+        .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #aaa;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* --- Цитаты --- */
+        .quote-box {
+            min-height: 40px;
+            font-style: italic;
+            color: #ff8fa3;
+            font-size: 1rem;
+            opacity: 0.8;
+            transition: opacity 1s;
+        }
+
+        /* --- Эффект клика (частицы) --- */
+        .click-heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b81;
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: blast 1s ease-out forwards;
+            z-index: 99;
+        }
+        .click-heart:before, .click-heart:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: inherit;
+        }
+        .click-heart:before { left: -10px; }
+        .click-heart:after { top: -10px; }
+
+        @keyframes blast {
+            0% { transform: scale(0.5) rotate(45deg); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--rot)); opacity: 0; }
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .container { padding: 1.5rem; margin: 10px; }
+            .timer { gap: 10px; }
+            .time-box { min-width: 70px; padding: 10px; }
+            .number { font-size: 1.8rem; }
+            .label { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="heartsBg"></div>
+
+    <div class="container" id="tiltCard">
+        <h1 id="mainTitle">мы вместе</h1>
+        <p class="subtitle">только из за тебя этот счетчик идет дальше)</p>
+        
+        <div class="timer">
+            <div class="time-box">
+                <span class="number" id="days">0</span>
+                <span class="label">Дней</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="hours">0</span>
+                <span class="label">Часов</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="minutes">0</span>
+                <span class="label">Минут</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="seconds">0</span>
+                <span class="label">Секунд</span>
+            </div>
+        </div>
+
+        <div class="quote-box" id="quote">
+            "любовь - когда весь мир в одном человеке. ну в тебе крч"
+        </div>
+    </div>
+
+    <script>
+        // --- НАСТРОЙКИ ---
+        // Ты указал 2025 год. Это будущее.
+        // Если это дата начала отношений, поменяй год на прошлый (например 2023).
+        // Сейчас скрипт автоматически определит: это таймер "ДО" или "ПОСЛЕ".
+        const targetDate = new Date("2025-11-02T01:28:34"); 
+
+        // --- 1. Логика Таймера ---
+        function updateTimer() {
+            const now = new Date();
+            let diff = now - targetDate;
+            const title = document.getElementById('mainTitle');
+
+            // Проверка: Дата в будущем или прошлом?
+            if (diff < 0) {
+                // Если дата в будущем (обратный отсчет)
+                diff = Math.abs(diff);
+                if(title.innerText !== "до встречи") title.innerText = "до встречи";
+            } else {
+                // Если дата в прошлом (сколько вместе)
+                if(title.innerText !== "мы вместе") title.innerText = "мы вместе";
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- 2. Фон из сердечек ---
+        function createHearts() {
+            const container = document.getElementById('heartsBg');
+            const heartCount = 25; 
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-bg');
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 3 + 5 + "s"; 
+                heart.style.animationDelay = Math.random() * 5 + "s";
+                const colors = ['rgba(255, 107, 129, 0.4)', 'rgba(255, 71, 87, 0.4)', 'rgba(255, 255, 255, 0.2)'];
+                heart.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // --- 3. 3D Tilt эффект (Наклон карточки) ---
+        const card = document.getElementById('tiltCard');
+        const body = document.querySelector('body');
+
+        body.addEventListener('mousemove', (e) => {
+            // Вычисляем поворот на основе положения мыши
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        
+        // Сброс при выходе мыши (опционально)
+        /* body.addEventListener('mouseleave', () => {
+             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        }); */
+
+        // --- 4. Эффект взрыва при клике ---
+        document.addEventListener('click', function(e) {
+            const amount = 8; // Количество частиц
+            const x = e.clientX;
+            const y = e.clientY;
+
+            for (let i = 0; i < amount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('click-heart');
+                document.body.appendChild(particle);
+
+                // Случайное направление разлета
+                const destinationX = (Math.random() - 0.5) * 200 + "px";
+                const destinationY = (Math.random() - 0.5) * 200 + "px";
+                const rotation = Math.random() * 520 + "deg";
+
+                particle.style.left = x + "px";
+                particle.style.top = y + "px";
+                
+                // Передаем переменные в CSS
+                particle.style.setProperty('--tx', destinationX);
+                particle.style.setProperty('--ty', destinationY);
+                particle.style.setProperty('--rot', rotation);
+                
+                // Разные цвета
+                const colors = ['#ff6b81', '#ff4757', '#2ed573', '#ffa502', '#ffffff'];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                // Удаляем элемент после анимации
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        });
+
+        // --- 5. Смена цитат ---
+        const quotes = [
+            "любовь - это когда весь мир в одном человеке. ну в тебе крч",
+            "ты правда самое ценное что у меня есть",
+            "счатье только с тобой",
+            "беемс",
+            "с тобой этот гнилой мир в ярких красках",
+            "спасибо что до сих пор рядом"
+        ];
+        
+        const quoteElement = document.getElementById('quote');
+        let quoteIndex = 0;
+
+        setInterval(() => {
+            quoteElement.style.opacity = 0; // Исчезает
+            setTimeout(() => {
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                quoteElement.innerText = quotes[quoteIndex];
+                quoteElement.style.opacity = 0.8; // Появляется
+            }, 1000);
+        }, 6000); // Каждые 6 секунд
+
+    </script>
+</body>
+</html>
