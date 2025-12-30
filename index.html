@@ -2,39 +2,91 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- Запрет масштабирования и зума -->
+    <!-- Отключаем возможность приближать экран -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Love</title>
     <style>
-        /* Основные настройки страницы */
+        /* Настройки страницы */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            background-color: #ffffff; /* Белый фон (создаст белые полосы) */
+            overflow: hidden; /* Убираем прокрутку */
+            background-color: #000; /* Черный фон (как в кино) */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Контейнер для видео с отступами */
-        #video-container {
-            position: absolute;
-            top: 5%;      /* Отступ сверху 5% */
-            left: 5%;     /* Отступ слева 5% */
-            width: 90%;   /* Ширина 90% (100 - 5 слева - 5 справа) */
-            height: 90%;  /* Высота 90% (100 - 5 сверху - 5 снизу) */
-            background-color: #000; /* Черная подложка пока грузится видео */
-            box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Небольшая тень для красоты (можно убрать) */
-        }
-
-        /* Само видео */
+        /* Настройки видео */
         video {
+            /* Эти настройки делают так, чтобы видео вмещалось в экран, 
+               но НЕ ОБРЕЗАЛОСЬ. Оно будет максимально возможного размера */
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: none; /* Скрыто до клика */
+        }
+
+        /* Стартовый экран */
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Видео заполняет свои 90% экрана полностью */
-            display: block;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #000;
         }
 
+        #overlay p {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Оверлей для запуска звука -->
+    <div id="overlay">
+        <p>Нажми сюда</p>
+    </div>
+
+    <!-- Видео без элементов управления -->
+    <video id="video-player" playsinline>
+        <source src="love.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        const video = document.getElementById('video-player');
+        const overlay = document.getElementById('overlay');
+
+        overlay.addEventListener('click', () => {
+            // Убираем надпись
+            overlay.style.display = 'none';
+            // Показываем видео
+            video.style.display = 'block';
+            
+            // Включаем звук и запускаем
+            video.muted = false;
+            video.play().catch(e => {
+                console.log("Ошибка: " + e);
+            });
+        });
+
+        // Запрет правой кнопки мыши
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+
+</body>
+</html>
         /* Экран "Нажми, чтобы начать" */
         #overlay {
             position: absolute;
