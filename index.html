@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!-- Запрет масштабирования -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love</title>
+    <style>
+        /* Сброс стилей */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Видео на весь экран */
+        #video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Заполняет экран без черных полос */
+            z-index: 1;
+            display: none; /* Скрыто до клика */
+        }
+
+        /* Экран приветствия (чтобы разрешить звук) */
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Оверлей для клика -->
+    <div id="overlay">
+        <p>нажми на экран</p>
+    </div>
+
+    <!-- 
+      playsinline - важно для iPhone
+      Без controls - плеера не будет видно
+      Без loop - проиграет один раз и остановится
+    -->
+    <video id="video-player" playsinline>
+        <source src="love.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        const video = document.getElementById('video-player');
+        const overlay = document.getElementById('overlay');
+
+        // Обработчик клика по экрану
+        overlay.addEventListener('click', () => {
+            // Показываем видео
+            video.style.display = 'block';
+            
+            // Запускаем видео со звуком
+            video.play().then(() => {
+                // Если успешно запустилось, скрываем надпись
+                overlay.style.display = 'none';
+            }).catch(error => {
+                console.log("Ошибка воспроизведения: ", error);
+            });
+        });
+
+        // Блокировка контекстного меню (правой кнопки мыши), чтобы нельзя было скачать легко
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+
+</body>
+</html>
