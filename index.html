@@ -7,34 +7,124 @@
     <title>Love</title>
     <style>
         /* Сброс стилей */
-        body, html {
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
             background-color: #000;
+            box-sizing: border-box;
         }
 
-        /* Видео на весь экран */
-        #video-player {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Заполняет экран без черных полос */
+        /* Контейнер для видео — всегда занимает весь экран */
+        .video-wrap {
+            position: fixed; /* фиксируем к viewport, чтобы ничего не выползало */
+            inset: 0; /* top:0; right:0; bottom:0; left:0; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
             z-index: 1;
+        }
+
+        /* Видео: масштабируем, но не вылезает за границы окна */
+        #video-player {
+            /* Не растягиваем жёстко на 100% — используем ограничения */
+            max-width: 100vw;
+            max-height: 100vh;
+            width: auto;
+            height: auto;
+            object-fit: contain; /* сохраняет целиком видео и не обрезает его */
             display: none; /* Скрыто до клика */
+            background: #000;
+            box-shadow: none;
         }
 
         /* Экран приветствия (чтобы разрешить звук) */
         #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            inset: 0;
+            background-color: #000;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        /* На маленьких экранах можно немного уменьшить текст */
+        @media (max-height: 420px) {
+            #overlay { font-size: 18px; padding: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Оверлей для клика -->
+    <div id="overlay">
+        <p>нажми на экран</p>
+    </div>
+
+    <!-- Контейнер, чтобы корректно центрировать видео вьюпорта -->
+    <div class="video-wrap" aria-hidden="true">
+        <!-- 
+          playsinline - важно для iPhone
+          Без controls - плеера не будет видно
+          Без loop - проиграет один раз и остановится
+        -->
+        <video id="video-player" playsinline>
+            <source src="love.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        const video = document.getElementById('video-player');
+        const overlay = document.getElementById('overlay');
+
+        // Подгоняем видео по размеру окна (на случай поворота / изменения размера)
+        function fitVideo() {
+            // CSS max-width/max-height уже предотвращает выход за границы,
+            // но здесь на всякий случай можно явно обновить размеры.
+            // Оставим реальное значение auto, браузер сам подгонит под max-*
+            video.style.width = 'auto';
+            video.style.height = 'auto';
+        }
+
+        // Обработчик клика по экрану
+        overlay.addEventListener('click', () => {
+            // Показываем видео
+            video.style.display = 'block';
+            
+            // Попробуем запустить видео со звуком
+            video.play().then(() => {
+                // Если успешно запустилось, скрываем надпись
+                overlay.style.display = 'none';
+                // Обновляем подгонку
+                fitVideo();
+            }).catch(error => {
+                console.log("Ошибка воспроизведения: ", error);
+            });
+        });
+
+        // Обновляем при изменении размера окна / ориентации
+        window.addEventListener('resize', () => {
+            fitVideo();
+        });
+
+        // Если видео уже в DOM и автозапуск невозможен, можно сделать его видимым для отладки:
+        // video.style.display = 'block';
+
+        // Блокировка контекстного меню (правой кнопки мыши), чтобы нельзя было скачать легко
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+
+</body>
+</html>            height: 100%;
             background-color: #000;
             z-index: 2;
             display: flex;
